@@ -38,17 +38,47 @@ int main(int argc, char *argv[])
 	return status;
 }
 
+char* readTitle()
+{
+	char filename = "ascii_title.txt";
+	FILE *filePointer;
+	char *buffer = 0;
+	long length;
+	int i = 0;
+
+	filePointer = fopen("ascii_title.txt", "rb");
+
+	if (filePointer == NULL)
+	{
+		printf("ERROR: cannot open title file.\n");
+		exit(0);
+	}
+	else
+	{
+		fseek(filePointer, 0, SEEK_END);
+		length = ftell(filePointer);
+
+		fseek(filePointer, 0, SEEK_SET);
+		buffer = malloc(length + 1);
+
+		if (buffer)
+		{
+			fread(buffer, 1, length, filePointer);
+		}
+
+		buffer[length] = '\0';
+
+		fclose(filePointer);
+	}
+
+	return buffer;
+}
+
 int mainMenu()
 {
 	// Print out the menu.
-	printf("______     _                                  ___                                   \n"
-           "| ___ \\   | |                                |_  |                                  \n"
-           "| |_/ /__ | | _____ _ __ ___   ___  _ __       | | ___  _   _ _ __ _ __   ___ _   _ \n"
-           "|  __/ _ \\| |/ / _ \\ '_ ` _ \\ / _ \\| '_ \\      | |/ _ \\| | | | '__| '_ \\ / _ \\ | | |\n"
-           "| | | (_) |   <  __/ | | | | | (_) | | | | /\\__/ / (_) | |_| | |  | | | |  __/ |_| |\n"
-           "\\_|  \\___/|_|\\_\\___|_| |_| |_|\\___/|_| |_| \\____/ \\___/ \\__,_|_|  |_| |_|\\___|\\__, |\n"
-           "                                                                               __/ |\n"
-           "                                                                              |___/ \n");
+	char *title = readTitle();
+	printf("%s\n", title);
 	printf("Welcome!\n");
 	printf("%d) Play new game\n", START_NEW_GAME);
 	printf("%d) Quit\n", QUIT_GAME);
