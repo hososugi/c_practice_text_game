@@ -3,16 +3,16 @@
 #include "pch.h"
 
 void roomLook(const struct Room* self);
-void roomGo(struct Room* self, const char *noun);
+void roomGo(const struct Room* self, const char* noun);
 
-enum directions
+enum Directions
 {
 	north = 0,
 	east,
 	south,
 	west,
 	up,
-	down 
+	down
 };
 
 struct Room

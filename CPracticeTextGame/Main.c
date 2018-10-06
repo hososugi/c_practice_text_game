@@ -42,9 +42,9 @@ int main(int argc, char *argv[])
 
 char* readTitle()
 {
-	char *filename = "./Config/ascii_title2.txt";
-	FILE *filePointer;
-	char *buffer = 0;
+	char* filename = "./Config/ascii_title2.txt";
+	FILE* filePointer;
+	char* buffer = 0;
 	long length;
 	int i = 0;
 
@@ -79,7 +79,7 @@ char* readTitle()
 int mainMenu()
 {
 	// Print out the menu.
-	char *title = readTitle();
+	char* title = readTitle();
 	printf("%s\n", title);
 	printf("Welcome!\n");
 	printf("%d) Play new game\n", START_NEW_GAME);
@@ -87,14 +87,10 @@ int mainMenu()
 
 	// Get the player input.
 	char menuInputString[NAME_SIZE] = {'\0'};
-	char *endPointer;
+	char* endPointer;
 
 	printf(">");
-
 	getInput(menuInputString);
-	//fgets(menuInputString, INPUT_SIZE, stdin);
-	//if ((strlen(menuInputString) > 0) && (menuInputString[strlen(menuInputString) - 1] == '\n'))
-	//	menuInputString[strlen(menuInputString) - 1] = '\0';
 
 	return strtol(menuInputString, &endPointer, 10);
 }
@@ -102,8 +98,8 @@ int mainMenu()
 int startNewGame()
 {
 	// Set up the rooms.
-	rooms[0] = (struct Room) { 0, "Your Bedroom", "A description of your bedroom", roomLook };
-	rooms[1] = (struct Room) { 1, "The Living room", "a description of the living room", roomLook };
+	rooms[0] = (struct Room) { 0, "Your Bedroom", "A description of your bedroom", roomLook, {NULL} };
+	rooms[1] = (struct Room) { 1, "The Living room", "a description of the living room", roomLook, {NULL} };
 
 	rooms[0].look = roomLook;
 	rooms[1].look = roomLook;
@@ -121,9 +117,10 @@ int startNewGame()
 
 	getInput(playerName);
 
-	player = (struct Player) { playerName, 1, 1, startRoom, playerLook };
+	player = (struct Player) { playerName, 1, 1, startRoom, playerLook, playerGo };
 	player.room = startRoom;
 	player.look = playerLook;
+	player.go   = playerGo;
 
 	return playGame();
 }
@@ -133,10 +130,10 @@ int playGame()
 	int quitCondition = 0;
 	int status = 1;
 	char input[INPUT_SIZE];
-	char *token;
-	char *tokens[10];
+	char* token;
+	char* tokens[10];
 	int tokenIndex = 0;
-	char *action = malloc(INPUT_SIZE);
+	char* action = malloc(INPUT_SIZE);
 
 	// Game loop
 	while(!quitCondition)
@@ -165,11 +162,14 @@ int playGame()
 
 			// Attempt the actions.
 			action = tokens[0];
-			
-			if(strcmp(action, "look") == 0)
+
+			if (strcmp(action, "look") == 0)
 			{
-				printf("Do the look action.\n");
 				player.room->look(player.room);
+			}
+			else if (strcmp(action, "go") == 0)
+			{
+				player.go(&player, NULL);
 			}
 			else if(strcmp(action, "quit") == 0)
 			{
@@ -189,13 +189,15 @@ int playGame()
 
 char* getInput(char* outputString)
 {
-	char *input = malloc(INPUT_SIZE + 1);
+	char* input = malloc(INPUT_SIZE + 1);
 
 	fgets(input, INPUT_SIZE, stdin);
 	if((strlen(input) > 0) && (input[strlen(input) - 1] == '\n'))
 		input[strlen(input) - 1] = '\0';
 
 	strcpy(outputString, input);
+
+	free(input);
 
 	return outputString;
 }
