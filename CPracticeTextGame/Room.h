@@ -2,8 +2,8 @@
 #define ROOM_H
 #include "pch.h"
 
-extern void roomLook(struct Room self);
-extern void roomGo(struct Room self, const char *noun);
+void roomLook(const struct Room* self);
+void roomGo(struct Room* self, const char *noun);
 
 enum directions
 {
@@ -20,7 +20,7 @@ struct Room
 	int id;
 	char name[NAME_SIZE];
 	char description[DESCRIPTION_SIZE];
-	void (*look)();
+	void(*look)(const struct Room*);
 	struct Room* neighbors[6];
 };
 #endif

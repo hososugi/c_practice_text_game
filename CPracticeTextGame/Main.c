@@ -8,11 +8,13 @@ _Bool playing      = 1;
 rsize_t strmax     = sizeof input;
 const char *delims = " \t\n";
 struct Player player;
+struct Room rooms[2];
 
 // Declare the functions.
 int mainMenu();
 int startNewGame();
 int playGame();
+char* getInput(char* outputString);
 
 int main(int argc, char *argv[])
 {
@@ -84,19 +86,27 @@ int mainMenu()
 	printf("%d) Quit\n", QUIT_GAME);
 
 	// Get the player input.
-	int menuInput;
-	printf(">");
-	scanf_s("%d", &menuInput);
+	char menuInputString[NAME_SIZE] = {'\0'};
+	char *endPointer;
 
-	return menuInput;
+	printf(">");
+
+	getInput(menuInputString);
+	//fgets(menuInputString, INPUT_SIZE, stdin);
+	//if ((strlen(menuInputString) > 0) && (menuInputString[strlen(menuInputString) - 1] == '\n'))
+	//	menuInputString[strlen(menuInputString) - 1] = '\0';
+
+	return strtol(menuInputString, &endPointer, 10);
 }
 
 int startNewGame()
 {
 	// Set up the rooms.
-	struct Room rooms[2];
 	rooms[0] = (struct Room) { 0, "Your Bedroom", "A description of your bedroom", roomLook };
 	rooms[1] = (struct Room) { 1, "The Living room", "a description of the living room", roomLook };
+
+	rooms[0].look = roomLook;
+	rooms[1].look = roomLook;
 
 	// Set up the room neighbors.
 	rooms[0].neighbors[east] = &rooms[1];
@@ -106,12 +116,14 @@ int startNewGame()
 	//startRoom.neighbors = (struct Room*) malloc(sizeof(struct Room) * 6);
 
 	// Create the player.
-	char playerName[NAME_SIZE];
+	char playerName[NAME_SIZE] = {'\0'};
 	printf("What is your name?\n>");
-	scanf_s("%s", &playerName, sizeof(playerName));
 
-	struct Player player;
+	getInput(playerName);
+
 	player = (struct Player) { playerName, 1, 1, startRoom, playerLook };
+	player.room = startRoom;
+	player.look = playerLook;
 
 	return playGame();
 }
@@ -124,23 +136,26 @@ int playGame()
 	char *token;
 	char *tokens[10];
 	int tokenIndex = 0;
-	
+	char *action = malloc(INPUT_SIZE);
+
 	// Game loop
-	do
+	while(!quitCondition)
 	{
-		printf("Game Loop.\n");
+		//printf("Game Loop.\n");
 
 		// Reset the input string and get it again.
-		memset(input, 0, strlen(input));
+		memset(input, '\0', sizeof(input));
+		memset(action, '\0', sizeof(action));
+		memset(tokens, '\0', sizeof tokens);
+		tokenIndex = 0;
+
 		printf(">");
-		scanf_s("%s", &input, sizeof(input));
+
+		getInput(input);
 
 		if(input != "")
 		{
 			// Parse the input here.
-			memset(tokens, 0, sizeof tokens);
-			tokenIndex = 0;
-
 			tokens[tokenIndex] = strtok(input, " ");
 
 			while(tokens[tokenIndex] != NULL)
@@ -148,28 +163,39 @@ int playGame()
 				tokens[++tokenIndex] = strtok(NULL, " ");
 			}
 
-			printf("Action: '%s'\n", tokens[0]);
-
 			// Attempt the actions.
-			char *action = tokens[0];
-			switch(*action)
+			action = tokens[0];
+			
+			if(strcmp(action, "look") == 0)
 			{
-				case 'l':
-				case 'look':
-					printf("Do the look action.\n");
-					break;
-				case 'quit':
-					printf("Thank you for playing. Bye.\n");
-					quitCondition = 1;
-					break;
-				default:
-					printf("Couldn't understand what you want to do.\n");
-					break;
+				printf("Do the look action.\n");
+				player.room->look(player.room);
+			}
+			else if(strcmp(action, "quit") == 0)
+			{
+				printf("Thank you for playing. Bye.\n");
+				quitCondition = 1;
+			}
+			else
+			{
+				printf("Couldn't understand what you want to do.\n");
 			}
 		}
 
-	}
-	while(!quitCondition);
+	}	
 
 	return status;
+}
+
+char* getInput(char* outputString)
+{
+	char *input = malloc(INPUT_SIZE + 1);
+
+	fgets(input, INPUT_SIZE, stdin);
+	if((strlen(input) > 0) && (input[strlen(input) - 1] == '\n'))
+		input[strlen(input) - 1] = '\0';
+
+	strcpy(outputString, input);
+
+	return outputString;
 }
