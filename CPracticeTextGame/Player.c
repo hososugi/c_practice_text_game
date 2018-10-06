@@ -21,17 +21,17 @@ void playerGo(const struct Player* self, char* direction)
 			{
 				// No hashes, so we'll do this for now for each direction.
 				if (i == 0)
-					strcat(directionsString, "North, ");
+					strcat(directionsString, "north, ");
 				else if (i == 1)
-					strcat(directionsString, "East, ");
+					strcat(directionsString, "east, ");
 				else if (i == 2)
-					strcat(directionsString, "South, ");
+					strcat(directionsString, "south, ");
 				else if (i == 3)
-					strcat(directionsString, "West, ");
+					strcat(directionsString, "west, ");
 				else if (i == 4)
-					strcat(directionsString, "Up, ");
+					strcat(directionsString, "up, ");
 				else if (i == 5)
-					strcat(directionsString, "Down, ");
+					strcat(directionsString, "down, ");
 
 				directionCount++;
 			}

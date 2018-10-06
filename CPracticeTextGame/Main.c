@@ -135,6 +135,9 @@ int playGame()
 	int tokenIndex = 0;
 	char* action = malloc(INPUT_SIZE);
 
+	// Show the starting room.
+	player.room->look(player.room);
+
 	// Game loop
 	while(!quitCondition)
 	{
@@ -169,7 +172,10 @@ int playGame()
 			}
 			else if (strcmp(action, "go") == 0)
 			{
-				player.go(&player, NULL);
+				if(tokenIndex > 1)
+					player.go(&player, tokens[1]);
+				else
+					player.go(&player, NULL);
 			}
 			else if(strcmp(action, "quit") == 0)
 			{
