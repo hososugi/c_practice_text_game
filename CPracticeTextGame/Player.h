@@ -2,7 +2,8 @@
 #define PLAYER_H
 #include "pch.h"
 
-struct Player {
+struct Player
+{
 	char name[NAME_SIZE];
 	int gender;
 	int level;

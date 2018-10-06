@@ -15,7 +15,8 @@ enum directions
 	down 
 };
 
-struct Room {
+struct Room
+{
 	int id;
 	char name[NAME_SIZE];
 	char description[DESCRIPTION_SIZE];

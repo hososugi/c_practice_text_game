@@ -162,7 +162,8 @@
     <ClCompile Include="Room.c" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ascii_title.txt" />
+    <Text Include="Config\ascii_title.txt" />
+    <Text Include="Config\ascii_title2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

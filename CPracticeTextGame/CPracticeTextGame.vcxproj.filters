@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Config">
+      <UniqueIdentifier>{e2e2454e-866f-4d9c-9a64-e5bf65b48842}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -37,8 +40,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ascii_title.txt">
-      <Filter>Source Files</Filter>
+    <Text Include="Config\ascii_title.txt">
+      <Filter>Source Files\Config</Filter>
+    </Text>
+    <Text Include="Config\ascii_title2.txt">
+      <Filter>Source Files\Config</Filter>
     </Text>
   </ItemGroup>
 </Project>

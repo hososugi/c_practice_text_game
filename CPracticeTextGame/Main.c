@@ -40,17 +40,17 @@ int main(int argc, char *argv[])
 
 char* readTitle()
 {
-	char filename = "ascii_title.txt";
+	char *filename = "./Config/ascii_title2.txt";
 	FILE *filePointer;
 	char *buffer = 0;
 	long length;
 	int i = 0;
 
-	filePointer = fopen("ascii_title.txt", "rb");
+	filePointer = fopen(filename, "rb");
 
 	if (filePointer == NULL)
 	{
-		printf("ERROR: cannot open title file.\n");
+		printf("ERROR: cannot open title file %s.\n", filename);
 		exit(0);
 	}
 	else
@@ -120,12 +120,54 @@ int playGame()
 {
 	int quitCondition = 0;
 	int status = 1;
-
+	char input[INPUT_SIZE];
+	char *token;
+	char *tokens[10];
+	int tokenIndex = 0;
+	
+	// Game loop
 	do
 	{
-		printf("Game loop!\n");
-		quitCondition = 1;
-		//game loop
+		printf("Game Loop.\n");
+
+		// Reset the input string and get it again.
+		memset(input, 0, strlen(input));
+		printf(">");
+		scanf_s("%s", &input, sizeof(input));
+
+		if(input != "")
+		{
+			// Parse the input here.
+			memset(tokens, 0, sizeof tokens);
+			tokenIndex = 0;
+
+			tokens[tokenIndex] = strtok(input, " ");
+
+			while(tokens[tokenIndex] != NULL)
+			{
+				tokens[++tokenIndex] = strtok(NULL, " ");
+			}
+
+			printf("Action: '%s'\n", tokens[0]);
+
+			// Attempt the actions.
+			char *action = tokens[0];
+			switch(*action)
+			{
+				case 'l':
+				case 'look':
+					printf("Do the look action.\n");
+					break;
+				case 'quit':
+					printf("Thank you for playing. Bye.\n");
+					quitCondition = 1;
+					break;
+				default:
+					printf("Couldn't understand what you want to do.\n");
+					break;
+			}
+		}
+
 	}
 	while(!quitCondition);
 
