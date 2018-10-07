@@ -5,7 +5,7 @@ void playerLook(const struct Player* self)
 	printf("You are %s. %d and level %d.\n", self->name, self->gender, self->level);
 }
 
-void playerGo(const struct Player* self, char* direction)
+void playerGo(struct Player* self, char* direction)
 {
 	if(direction == NULL)
 	{
@@ -55,6 +55,39 @@ void playerGo(const struct Player* self, char* direction)
 	}
 	else
 	{
-		printf("You are trying to go %s.\n", direction);
+		//printf("You are trying to go %s.\n", direction);
+		struct Room* newRoom = { NULL };
+
+		// Check if the room has an exit.
+		if (strcmp(direction, "north") == 0)
+		{
+			if(self->room->neighbors[north] != NULL)
+				newRoom = self->room->neighbors[north];
+		}
+		else if(strcmp(direction, "east") == 0)
+		{
+			if(self->room->neighbors[east] != NULL)
+				newRoom = self->room->neighbors[east];
+		}
+		else if(strcmp(direction, "south") == 0)
+		{
+			if (self->room->neighbors[south] != NULL)
+				newRoom = self->room->neighbors[south];
+		}
+		else if(strcmp(direction, "west") == 0)
+		{
+			if(self->room->neighbors[west] != NULL)
+				newRoom = self->room->neighbors[west];
+		}
+
+		if(newRoom != NULL)
+		{
+			self->room = newRoom;
+			printf("You went %s.\n", direction);
+			self->room->look(self->room);
+		}
+		else
+			printf("You can't go %s.\n", direction);
+		
 	}
 }

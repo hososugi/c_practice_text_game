@@ -177,7 +177,8 @@ int playGame()
 				else
 					player.go(&player, NULL);
 			}
-			else if(strcmp(action, "quit") == 0)
+			else if(strcmp(action, "quit") == 0
+				 || strcmp(action, "exit") == 0)
 			{
 				printf("Thank you for playing. Bye.\n");
 				quitCondition = 1;

@@ -3,7 +3,7 @@
 #include "pch.h"
 
 void playerLook(const struct Player* self);
-void playerGo(const struct Player* self, char* direction);
+void playerGo(struct Player* self, char* direction);
 
 struct Player
 {
